@@ -1,0 +1,3 @@
+
+
+We describe the LSST sky brightness calculator, an open-source python code for computing the night sky emission at Cerro Pachon in Chile. The sky brightness calculator returns surface brightness magnitudes or full spectra of the night sky across the full range of observing conditions we anticipate LSST will encounter. The code uses the ESO SkyCalc Sky Model Calculator (Noll et al. 2012; Jones et al. 2013) to construct a library of template spectra.  The ESO model includes emission from the upper and lower atmosphere, scattered starlight, scattered moonlight, and zodiacal light.  We have then extended the ESO templates with an empirical fit to the twilight sky emission as measured by a Canon all-sky camera installed at the LSST site.
