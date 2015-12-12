@@ -4,12 +4,22 @@ repo for the 2016 SPIE sky brightness code write up
 
 Author list:
 
-Peter Yoachim
+Yoachim, Peter 
 
-Andy Connolly
+Coughlin, Michael
 
-Michael Coughlin
+Claver, Charles F.
 
-Chis Stubbs
+Connolly, Andrew J.
 
-**add yourself if you would like on**
+Cook, Kem
+
+Ivezic, Zeljko
+
+Jones, R. Lynne
+
+Petry, Catherine;
+
+Ridgway, Stephen T.
+
+Stubbs, Christopher
