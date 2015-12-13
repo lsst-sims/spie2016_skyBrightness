@@ -8,18 +8,26 @@ Yoachim, Peter
 
 Coughlin, Michael
 
+Angeli, George Z.
+
 Claver, Charles F.
 
 Connolly, Andrew J.
 
 Cook, Kem
 
+Daniel, Scott
+
 Ivezic, Zeljko
 
 Jones, R. Lynne
 
-Petry, Catherine;
+Petry, Catherine
+
+Reuter Michael
 
 Ridgway, Stephen T.
 
 Stubbs, Christopher
+
+Xin Bo
