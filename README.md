@@ -6,28 +6,26 @@ Author list:
 
 Yoachim, Peter 
 
-Coughlin, Michael
+Coughlin, Michael --confirmed
 
 Angeli, George Z.
 
 Claver, Charles F.
 
-Connolly, Andrew J.
+Connolly, Andrew J. --confirmed
 
-Cook, Kem
+Cook, Kem --confirmed
 
-Daniel, Scott
+Daniel, Scott --confirmed
 
-Ivezic, Zeljko
+Ivezic, Zeljko --confirmed
 
-Jones, R. Lynne
+Jones, R. Lynne --confirmed
 
-Petry, Catherine
+Petry, Catherine --confirmed
 
-Reuter Michael
+Reuter, Michael
 
-Ridgway, Stephen T.
+Stubbs, Christopher --confirmed
 
-Stubbs, Christopher
-
-Xin Bo
+Xin, Bo --confirmed
