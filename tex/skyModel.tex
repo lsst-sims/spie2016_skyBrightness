@@ -59,8 +59,10 @@ Zodiacal light is caused by sunlight scattered by dust grains in the plane of th
 We use an airmass grid of 1, 1.2, 1.4, 2.0, and 2.5 and a Healpixel \cite{Gorski99} grid with 192 elements (nside=4, resolution of $\sim15\degree$).  We use the ESO calculator to generate spectra at the center of each Healpixel coordinate and each airmass value, resulting in 960 zodiacal spectra that we can then interpolate to arbitrary position and airmass.  The Healpixels are a grid in heliocentric ecliptic latitude and longitude (i.e., longitude zero is fixed to the solar position).  Some example zodiacal light spectra are shown in Figure~\ref{fig:zodiacal}. 
 
 
-\begin{figure}
+\begin{figure}[ht]
+  \begin{center}
   \includegraphics[height=5cm]{plots/zodiacal.pdf}
+  \end{center}
   \caption{Example of zodiacal light interpolated from ESO templates. \label{fig:zodiacal}}
 \end{figure}
 
@@ -69,10 +71,12 @@ We use an airmass grid of 1, 1.2, 1.4, 2.0, and 2.5 and a Healpixel \cite{Gorski
 
 \cite{Krisciunas91} provide one of the most popular models for computing the scattered moon light. This model is based on observed magnitudes from Mauna Kea. The ESO code uses the updated model of \cite{Jones13} which is fully spectroscopic and designed for Cerro Paranal. \cite{Jones13} claim their model uncertainty is $<20$\% in the optical.  Unlike the \cite{Krisciunas91} model that is a fit to observed broadband sky brightnesses, the \cite{Jones13} model uses fully 3D single scattering calculations and provides an entire spectrum. The \cite{Jones13} model does a better job matching observations than the \cite{Krisciunas91}, particularly at short wavelengths.
 
-We build a template library of scattered moonlight by considering moon-sun separations of 0$\degree$\ to 180$\degree$ in 15 degree steps, and moon altitudes from 15$\degree$\ to 90$\degree$.  We then compute the expected spectrum on a grid of 29 positions across the sky. This is a Healpixel grid (with nside=4, resolution of $\sim15\degree$), based on altitude and azimuth (relative to the moon), where we ignore pointings with an airmass greater than 2.6. This results in a total of 2,262 template spectra for the scattered moonlight\footnote{The very observant might notice that since the azimuth is defined relative to the moon, the sky is symmetric and we should be able to drop half of the Healpixels}. Examples of the scattered moonlight spectra are shown in Figure~\ref{fig:moon}.
+We build a template library of scattered moonlight by considering moon-sun separations of 0$\degree$\ to 180$\degree$ in 15 degree steps, and moon altitudes from 15$\degree$\ to 90$\degree$.  We then compute the expected spectrum on a grid of 29 positions across the sky. This is a Healpixel grid (with an nside of 4, resolution of $\sim15\degree$), based on altitude and azimuth (relative to the moon), where we ignore pointings with an airmass greater than 2.6. This results in a total of 2,262 template spectra for the scattered moonlight\footnote{The very observant might notice that since the azimuth is defined relative to the moon, the sky is symmetric and we should be able to drop half of the Healpixels}. Examples of the scattered moonlight spectra are shown in Figure~\ref{fig:moon}.
 
-\begin{figure}
+\begin{figure}[ht]
+  \begin{center}
   \includegraphics[height=5cm]{plots/moon.pdf}
+  \end{center}
   \caption{Example of the scattered lunar light. \label{fig:moon}}
 \end{figure}
 
@@ -83,8 +87,10 @@ The airglow is assumed to be a function of airmass and solar activity as measure
 
 Technically, the airglow also varies with the time of year and time of night.  This variation is quite small relative to the solar activity \cite{Noll12}, so we have not included it.  \cite{Patat08} also shows the seasonal variation is negligible in $B$, and grows to around a peak of $\pm0.5$ mags in $I$. Examples of the airglow spectra are shown in Figure~\ref{fig:airglow}.
 
-\begin{figure}
+\begin{figure}[ht]
+\begin{center}
   \includegraphics[height=5cm]{plots/airglow.pdf}
+  \end{center}
   \caption{Example of airglow spectra. \label{fig:airglow}}
 \end{figure}
 
@@ -104,9 +110,11 @@ The lower atmosphere only contains emission in the IR, but we have included it f
 Because the upper atmosphere, lower atmosphere, and scattered star light only vary as a function of airmass, we have combined them. By default, we interpolate from model spectra at 12 airmass values.  Example of the spectra are shown in Figure~\ref{fig:merged}.
 
 
-\begin{figure}
+\begin{figure}[ht]
+  \begin{center}
   \includegraphics[height=5cm]{plots/merged0.pdf}\includegraphics[height=5cm]{plots/merged1.pdf} \\
   \includegraphics[height=5cm]{plots/merged2.pdf}\includegraphics[height=5cm]{plots/merged3.pdf}
+  \end{center}
   \caption{Examples of the sky brightness components that are only dependent on airmass. \label{fig:merged}}
 \end{figure}
 
@@ -124,8 +132,6 @@ Several sky monitoring instruments have been installed at the LSST site on Cerro
 
 The current pipeline for the Canon data takes aperture photometry of bright stars and records their magnitudes as well as the sky brightness measured in an annulus around each star.  We have combined the observations into a database with a resulting 42,000 images producing 91.5 million photometric measurements spanning 311 days.  
 
-In addition to the Canon camera, three NIST-calibrated photodiodes have been installed to observe the zenith sky brightness in $R$, $z$, and $y$ bands. The photodiode data spans 293 days, and includes 36.1 million sky brightness measurements.
-
 We use these sky observations to fit a reasonable twilight sky brightness model and verify the other components of the sky brightness model.
 
 \section{Additional Components}\label{sec:twi}
@@ -133,45 +139,35 @@ We use these sky observations to fit a reasonable twilight sky brightness model 
 
 The ESO sky model does not include a component for sunlight scattered by earth's atmosphere.  The twilight sky brightness is difficult to compute analytically.  While scattered moonlight can be computed via a single or double scattering model, the solar twilight comes from multiple scatterings, thus there is no simple analytic model for computing the solar twilight from first principles and models must instead rely on Monte Carlo radiative transfer simulations \cite{Patat06}.
 
-Rather than compute radiative transfer, we fit a simple empirical model to the twilight flux.  Data from the all-sky camera as well as other sites show that after the sun's altitude drops below $\sim-10\degree$ the twilight flux decays exponentially with solar altitude. Figure~\ref{diodePlot} shows the zenith sky brightness as a function of sun altitude measured by the photodiodes. The total sky brightness is well fit by an exponential decay plus a constant floor.  In Figures~\ref{fig:twiSky} and~\ref{fig:twiExp} we show that when one uses alt-az coordinates, where azimuth is heliocentric (sun always at az=0), the twilight is well described as an exponential decay plus a constant for all points in the sky.
-
-The data from the photodiodes seems to imply the twilight light is significantly fainter than previous studies have found. In Figure~\ref{fig:compareZenithDiode}, we compare the photodiode observations to the sky brightness models. At moonrise (moon altitude of 0$\deg$), we expect the sky to become significantly brighter as single-scattering of moonlight becomes possible over the visible sky.  Figure~\ref{fig:compareZenithCanon} shows that the Canon all-sky camera does see the expected sharp transition at moonrise.  It would appear that the photodiodes are not sensitive enough to detect the dark-time sky brightness level, and only register changes when the moon is very high or twilight is already well underway. Thus, the photodiode data is of limited use for fitting the free parameters in Equation~\ref{eqn:twi}.
+Rather than compute radiative transfer, we fit a simple empirical model to the twilight flux.  Data from the all-sky camera as well as other sites show that after the sun's altitude drops below $\sim-10\degree$ the twilight flux decays exponentially with solar altitude. The total sky brightness is well fit by an exponential decay plus a constant floor.  In Figures~\ref{fig:twiSky} and~\ref{fig:twiExp} we show that when one uses alt-az coordinates, where azimuth is heliocentric (sun always at az=0), the twilight is well described as an exponential decay plus a constant for all points in the sky.  Figure~\ref{fig:compareZenithCanon} shows that the Canon all-sky camera does see the expected sharp transition at moonrise.  
 
 
-
-
-
-% from fitDiode.py
-\begin{figure*}
-  \includegraphics[height=5cm]{plots/diode.pdf}
-  \caption{Photodiode observations of zenith at the LSST site. The light gray points show individual measurements, while the yellow points are the median-binned data. The solid blue line shows the best fit exponential decay plus constant. The green vertical line marks 12 degree twilight, and the dashed vertical blue line shows where the data was not used because the detector was often saturated at that point. \label{diodePlot}}
-\end{figure*}
-
-
-\begin{figure*}
-  \includegraphics[height=5cm]{plots/diodeCheck_r.pdf} \includegraphics[height=5cm]{plots/diodeCheck_z.pdf} \includegraphics[height=5cm]{plots/diodeCheck_y.pdf} \\
-  \caption{Comparing the photodiode zenith observations (top row) to the sky brightness model (bottom row).  The sky model predicts a sharp transition at moonrise that is not seen in the observations.   \label{fig:compareZenithDiode}}
-\end{figure*}
-
-
-\begin{figure*}
-  \includegraphics[height=5cm]{plots/simple_zenith_comp_B.pdf} \includegraphics[height=5cm]{plots/simple_zenith_comp_G.pdf} \includegraphics[height=5cm]{plots/simple_zenith_comp_R.pdf}
-  \caption{Comparing the Canon all-sky camera zenith observations (top row) to the model (bottom row).  Unlike the photodiode observations, there is an obvious transition in the observations at a moon altitude of $0\deg$. \label{fig:compareZenithCanon}}
+\begin{figure*}[ht]
+  \begin{center}
+  \includegraphics[height=5cm]{plots/simple_zenith_comp_B.pdf} \\
+  \includegraphics[height=5cm]{plots/simple_zenith_comp_G.pdf} \\
+  \includegraphics[height=5cm]{plots/simple_zenith_comp_R.pdf}
+  \end{center}
+  \caption{Comparing the Canon all-sky camera zenith observations (top row) to the model (bottom row). \label{fig:compareZenithCanon}}
 \end{figure*}
 
 
 
 % from twiPlotsForDoc.py
-\begin{figure*}
+\begin{figure*}[ht]
+  \begin{center}
   \includegraphics[height=5cm]{plots/twiExamples.pdf}
+  \end{center}
   \caption{Sky brightness values measured from the Canon all-sky camera after median binning spatially by Healpixels and combining similar sun altitude observations. Only frames with the moon below the horizon were used. Zenith is at the center of each image, and the sun is below the horizon at an azimuth of zero (bottom of the frame). The values are instrumental magnitudes.  \label{fig:twiSky}}
 \end{figure*}
 
 
 % from fitTwiSlopesSimul.py
-\begin{figure*}
-  \includegraphics[height=5cm]{plots/altDecay.pdf}
+\begin{figure*}[ht]
+  \begin{center}
+  \includegraphics[height=5cm]{plots/altDecay.pdf} \\
   \includegraphics[height=5cm]{plots/altDecayHA.pdf}
+  \end{center}
   \caption{Photometry from the Cannon all-sky camera, after it was been median-binned and selected for only times where the moon is down.  At low airmass (left panels), the sky brightness decays exponentially and has a small variation that is dominated by the change in airmass.  At higher airmasses (right panels), the decay is still exponential, but now is a function of both airmass and azimuth relative to the sun. \label{fig:twiExp}}
 \end{figure*}
 
@@ -203,7 +199,6 @@ We have taken the sky brightness measurements from the Canon camera (when the mo
 
 The best fitting parameters for $r_{12/z}$, $a$, $b$, and $c$ for each of the Canon filters and the photodiode data are listed in Table~\ref{table:canonFits}.
 
-We use the photodiode measurements in Figure~\ref{diodePlot} to fit $r_{12/z}$, and $a$ and then assume the $b$ and $c$ terms are similar to the optical bands.  The photodiode data seems to be very faint at 12-degree twilight compared to other data sets.  The photodiode $r$ filter is much fainter than the Canon R, and the photodiode $z$ is much fainter than Johnson's $I$. 
 
 One important lesson from the data is the counter-intuitive result that during twilight the darkest part of the sky is near zenith, not moderate airmass in the hemisphere facing away from the sun. One is better off observing at low airmass towards the sun rather than high airmass away from the sun.
 
@@ -237,19 +232,19 @@ While the parameters in Table~\ref{table:canonFits} do a reasonable job reproduc
 
 To generate magnitudes in LSST filters we have not observed, we assume the parameters in Table~\ref{table:canonFits} are smooth functions of wavelength and interpolate the best-fit parameters to the central wavelengths of the LSST filters.
 
-In our fits we have not used the photodiode $R$ band data, as the 12-degree twilight flux is surprisingly low ($r_{12/dark}=0.52$) and inconsistent with the Canon R fits.  This is concerning and it would be good to independently verify the $z$ and $y$ photodiode fit parameters.
-
 
 \section{Validation}\label{sec:validate}
 
 To verify the performance of the sky model, we compare it to the sky brightness observations made by the Canon all-sky camera.
 
 % from validate.py
-\begin{figure*}
-  \includegraphics[height=5cm]{plots/exampleSkys_0.pdf}
-  \includegraphics[height=5cm]{plots/exampleSkys_1.pdf}
-  \includegraphics[height=5cm]{plots/exampleSkys_2.pdf}
+\begin{figure*}[ht]
+  \begin{center}
+  \includegraphics[height=5cm]{plots/exampleSkys_0.pdf} \\
+  \includegraphics[height=5cm]{plots/exampleSkys_1.pdf} \\
+  \includegraphics[height=5cm]{plots/exampleSkys_2.pdf} \\
   \includegraphics[height=5cm]{plots/exampleSkys_3.pdf}
+  \end{center}
   \caption{Some examples of Canon all-sky observations and model values for airmasses less than 2.1. The sky observations have been binned into alt-az Healpixels (zenith at the center of the projections). These are all for the Canon R-filter. The top row shows a clear dark-time frame, the second row is a dark time frame where there were clouds. The third row shows a high moon, and the final row is during twilight with some light clouds. \label{fig:skyExamples}}
 \end{figure*}
 
@@ -263,10 +258,12 @@ Using the same set of 3400 observations, we zeropoint each frame (to correct for
 
 
 % from validate.py
-\begin{figure*}
-  \includegraphics[height=5cm]{plots/medianAngDiff_R_.pdf}\includegraphics[height=5cm]{plots/rmsAngDiff_R_.pdf}
-  \includegraphics[height=5cm]{plots/medianAngDiff_G_.pdf}\includegraphics[height=5cm]{plots/rmsAngDiff_G_.pdf}
+\begin{figure*}[ht]
+  \begin{center}
+  \includegraphics[height=5cm]{plots/medianAngDiff_R_.pdf}\includegraphics[height=5cm]{plots/rmsAngDiff_R_.pdf} \\
+  \includegraphics[height=5cm]{plots/medianAngDiff_G_.pdf}\includegraphics[height=5cm]{plots/rmsAngDiff_G_.pdf} \\
   \includegraphics[height=5cm]{plots/medianAngDiff_B_.pdf}\includegraphics[height=5cm]{plots/rmsAngDiff_B_.pdf}
+  \end{center}
   \caption{Comparing the angular distance between the model-predicted darkest spot on the sky and the darkest spot as observed by the Canon all-sky camera \label{fig:darkDir}.  Dashed lines mark moonrise and end of twilight (lower left region is dark-time).  The panels on the left show the median distance between the model and observation for each bin while the right panels show the robust-RMS for each bin.  Most of the variation can be attributed to frames with clouds.}
 \end{figure*}
 
@@ -274,10 +271,12 @@ Using the same set of 3400 observations, we zeropoint each frame (to correct for
 
 
 % from validate.py
-\begin{figure*}
+\begin{figure*}[ht]
+  \begin{center}
   \includegraphics[height=5cm]{plots/zenithMedian_R_.pdf}\includegraphics[height=5cm]{plots/zenithRMS_R_.pdf}
   \includegraphics[height=5cm]{plots/zenithMedian_G_.pdf}\includegraphics[height=5cm]{plots/zenithRMS_G_.pdf}
   \includegraphics[height=5cm]{plots/zenithMedian_B_.pdf}\includegraphics[height=5cm]{plots/zenithRMS_B_.pdf}
+  \end{center}
   \caption{ The difference between the model predicted zenith sky brightness and the observed values from the Canon all-sky camera.  The model does tend to fail very near the moon, thus the large residuals when the moon reaches high is expected.  \label{fig:zenithModel}}
 \end{figure*}
 
@@ -290,13 +289,60 @@ In Table~\ref{table:darkSky}, we compare the median dark sky surface brightness 
 In Table~\ref{table:zenithRMSSky}, we list the (robust) RMS residuals between our model and the zenith sky brightness observed by the Canon all-sky camera. In general, the residuals between the model and observations have an RMS between 0.2 and 0.3 magnitudes per square arcsecond.  
 
 
+% from checkDarkSky.py
+\begin{table}
+  \caption{Dark sky surface brightnesses }
+  \label{table:darkSky}
+  \begin{tabular}{c c  c}
+  Filter & Model & \cite{Ivezic08} \\
+  & ($\mu$) &  ($\mu$)  \\
+  $u$ &    22.81 $\pm$  0.04  &  22.90 \\
+  $g$ &    22.27 $\pm$  0.11  &  22.30 \\
+  $r$ &    21.25 $\pm$  0.08  &  21.20 \\
+  $i$ &    20.38 $\pm$  0.04  &  20.50 \\
+  $z$ &    19.40 $\pm$  0.02  &  19.60 \\
+  $y$ &    18.10 $\pm$  0.01  &  18.60 
+  \end{tabular}
+\end{table}
+
+
+% from validate.py
+\begin{table}
+  
+  \caption{ Robust RMS differences between the model and Canon sky observations in different conditions.}
+  \label{table:zenithRMSSky}
+  \begin{tabular}{c c c c}
+  Filter & Dark Time & Moon Up & Twilight \\
+  & (mags/sq arcsec)   & mags/sq arcsec) & (mags/sq arcsec) \\
+  \hline
+  R & 0.22 & 0.24 & 0.29 \\
+  G & 0.21 & 0.29 & 0.26 \\
+  B & 0.22 & 0.38 & 0.26 
+  \end{tabular}
+\end{table}
+
+
+\begin{table}
+  \caption{Parameter fits to data from \cite{Patat06}}
+  \label{table:PatatFits}
+  \begin{tabular}{c c c}
+  Filter & $r_{12/z}$ & $a$  \\
+  & & (1/radians) \\
+  \hline
+  U & 13.40 & 22.37 \\
+  B & 15.49 & 22.60 \\
+  V & 4.78  & 22.31 \\
+  R & 3.35  & 24.35 \\
+  I & 2.29  & 24.08
+\end{tabular}
+\end{table}
 
 
 
-
-
-\begin{figure}
+\begin{figure}[ht]
+  \begin{center}
   \includegraphics[height=5cm]{plots/patatFits.pdf}
+  \end{center}
   \caption{Zenith sky surface brightness data scraped from \cite{Patat06} and fit with our simple exponential decay plus constant model. Dashed black lines show the best-fit curves.  The red dashed line shows the 12-degree twilight line.  \label{fig:Patat} }
 \end{figure}
 
@@ -307,23 +353,29 @@ In Figures~\ref{fig:timeOfNight} and~\ref{fig:timeOfYear} we look at the observe
 
 We can also compare our model to various published observations of the night sky brightness.  \cite{Galaz15} observing a high-airmass target with Magellen in dark time report average sky brightnesses of $r=20.2$ and $g=21.8$ mag arcsec$^{-2}$.  Running our sky model, we find  $r=20.8$ and $g=22.0$ mag arcsec$^{-2}$--very similar in the $g$ band, and the model is 0.6 mags fainter in $r$.  Not too surprsing since we exepct the model to break down at higher airmasses in general.
 
-\begin{figure*}
+\begin{figure*}[ht]
+  \begin{center}
   \includegraphics[height=5cm]{plots/residTON_R.pdf}\includegraphics[height=5cm]{plots/residTON_G.pdf}\includegraphics[height=5cm]{plots/residTON_B.pdf} \\
   \includegraphics[height=5cm]{plots/zpTON_R.pdf}\includegraphics[height=5cm]{plots/zpTON_G.pdf}\includegraphics[height=5cm]{plots/zpTON_B.pdf}
+  \end{center}
   \caption{The Canon camera zenith sky brightness residuals along with the adopted magnitude zeropoint for each frame. The outlier residuals at large values are most likely times when there were clouds at zenith.  \label{fig:timeOfNight}}
 \end{figure*}
 
-\begin{figure*}
+\begin{figure*}[ht]
+\begin{center}
   \includegraphics[height=5cm]{plots/residTOY_R.pdf}\includegraphics[height=5cm]{plots/residTOY_G.pdf}\includegraphics[height=5cm]{plots/residTOY_B.pdf} \\
   \includegraphics[height=5cm]{plots/zpTOY_R.pdf}\includegraphics[height=5cm]{plots/zpTOY_G.pdf}\includegraphics[height=5cm]{plots/zpTOY_B.pdf}
+  \end{center}
   \caption{The Canon camera zenith sky brightness residuals along with the adopted magnitude zeropoint for each frame. \label{fig:timeOfYear}}
 \end{figure*}
 
 
 
-\begin{figure*}
+\begin{figure*}[ht]
+\begin{center}
   \includegraphics[height=5cm]{plots/medianResidMap_R.pdf}\includegraphics[height=5cm]{plots/medianResidMap_G.pdf}\includegraphics[height=5cm]{plots/medianResidMap_B.pdf} \\
   \includegraphics[height=5cm]{plots/stdResidMap_R.pdf}\includegraphics[height=5cm]{plots/stdResidMap_g.pdf}\includegraphics[height=5cm]{plots/stdResidMap_b.pdf}
+  \end{center}
   \caption{Median and RMS maps of the model dark time residuals. The ``bright spot'' that is in the upper left of all the residual images could be scattered light }
 \end{figure*}
 
@@ -331,7 +383,9 @@ We can also compare our model to various published observations of the night sky
 \cite{Coughlin15} use the sun as a proxy for the moon to observe the expected lunar contribution to the night sky brightness in LSST filters. In Figure~\ref{fig:cCompare} we compare Figure~3 from \cite{Coughlin15} with the output of a night-time computation of our sky model.  The plots show $\delta m_5$ as defined in \cite{Coughlin15} (basically, half the change in sky surface brightness in magnitudes).  
 
 \begin{figure*}
+  \begin{center}
   \includegraphics[height=5cm]{plots/deltam5.pdf}\includegraphics[height=5cm]{plots/a1_alt_angle_meshgrid.pdf}
+  \end{center}
   \caption{ Comparison of our sky model (left) and observations of the sun by \cite{Coughlin15} (right).  We only calculate for a single time (when the moon is at an altitude of $\sim 30$ degrees. \label{fig:cCompare}}
 \end{figure*}
 
@@ -342,8 +396,6 @@ We can also compare our model to various published observations of the night sky
 Note that we have not verified the off-zenith IR performance of the model. If the source of scattering of IR sunlight in the atmosphere is significantly different from optical light, the model could be wrong. Measuring the IR surface brightness of the twilight sky along just a few more alt-az pointings could help in verifying and constraining the $b$ and $c$ terms of Equation~\ref{eqn:twi}.
 
 We have not included the sky brightness increase that can come from light reflected off of clouds.  With the data from the all-sky camera, we could construct a model for the increased brightness we expect as a function of atmospheric transparency.  
-
-In theory, we should be able to use the photodiode data to verify the sky brightness model has the correct zeropoint. In practice, it has proven difficult to find anyone who knows how to convert the output of the photodiodes to magnitudes per square arcsecond.
 
 When fitting the all-sky twilight data, we assumed that as long as the moon had set we could approximate the sky background at a given airmass as constant. We should go back and remove the expected zodiacal light as well as airglow given the solar activity at the time of the observations. Thus, we should expect the the fits in Table~\ref{table:canonFits} to be slightly skewed by the presence of zodiacal light, particularly parameter $c$.  
 
