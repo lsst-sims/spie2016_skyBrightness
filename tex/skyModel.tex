@@ -144,8 +144,8 @@ Rather than compute radiative transfer, we fit a simple empirical model to the t
 
 \begin{figure*}[ht]
   \begin{center}
-  \includegraphics[height=5cm]{plots/simple_zenith_comp_B.pdf} \\
-  \includegraphics[height=5cm]{plots/simple_zenith_comp_G.pdf} \\
+  \includegraphics[height=5cm]{plots/simple_zenith_comp_B.pdf} 
+  \includegraphics[height=5cm]{plots/simple_zenith_comp_G.pdf} 
   \includegraphics[height=5cm]{plots/simple_zenith_comp_R.pdf}
   \end{center}
   \caption{Comparing the Canon all-sky camera zenith observations (top row) to the model (bottom row). \label{fig:compareZenithCanon}}
@@ -156,7 +156,7 @@ Rather than compute radiative transfer, we fit a simple empirical model to the t
 % from twiPlotsForDoc.py
 \begin{figure*}[ht]
   \begin{center}
-  \includegraphics[height=5cm]{plots/twiExamples.pdf}
+  \includegraphics[height=7cm]{plots/twiExamples.pdf}
   \end{center}
   \caption{Sky brightness values measured from the Canon all-sky camera after median binning spatially by Healpixels and combining similar sun altitude observations. Only frames with the moon below the horizon were used. Zenith is at the center of each image, and the sun is below the horizon at an azimuth of zero (bottom of the frame). The values are instrumental magnitudes.  \label{fig:twiSky}}
 \end{figure*}
@@ -165,8 +165,9 @@ Rather than compute radiative transfer, we fit a simple empirical model to the t
 % from fitTwiSlopesSimul.py
 \begin{figure*}[ht]
   \begin{center}
-  \includegraphics[height=5cm]{plots/altDecay.pdf} \\
-  \includegraphics[height=5cm]{plots/altDecayHA.pdf}
+  \begin{tabular}{c c}
+  \includegraphics[height=7cm]{plots/altDecay.pdf} & \includegraphics[height=7cm]{plots/altDecayHA.pdf}
+  \end{tabular}
   \end{center}
   \caption{Photometry from the Cannon all-sky camera, after it was been median-binned and selected for only times where the moon is down.  At low airmass (left panels), the sky brightness decays exponentially and has a small variation that is dominated by the change in airmass.  At higher airmasses (right panels), the decay is still exponential, but now is a function of both airmass and azimuth relative to the sun. \label{fig:twiExp}}
 \end{figure*}
@@ -208,6 +209,7 @@ One important lesson from the data is the counter-intuitive result that during t
 \begin{table}
 \caption{Final parameters for equation~\ref{eqn:twi} used by the sky brightness twilight component. 
 \label{table:canonFits}}
+\begin{center}
 \begin{tabular}{c c c c c c c}
   Filter & $r_{12/z}$ & $a$  & $b$  & $c$  & $f_z,dark$ & m$_z,dark$ \\
   & & (1/radians) & (1/airmass) & (az term/airmass) & (erg/s/cm$^2$)$\times 10^8$ \\
@@ -224,7 +226,7 @@ One important lesson from the data is the counter-intuitive result that during t
  \multicolumn{7}{l}{The $b$ and $c$ terms are assumed to be similar to the other optical filters.} \\
  \multicolumn{7}{l}{$^{\rm{b}}$The $u$ filter is assumed to be identical to $B$, but with a brighter $r_{12/z}$ value.}
  \end{tabular}
- 
+ \end{center}
 \end{table}
 
 
@@ -249,25 +251,9 @@ To verify the performance of the sky model, we compare it to the sky brightness 
 \end{figure*}
 
 
-
-Figure~\ref{fig:darkDir} shows how well the sky model does at predicting the direction of the darkest region of the sky.  For the observations from the all-sky camera, we select those that have at least 200 stars detected to select those without extreme cloud coverage. To speed things up, we use every 10th frame from the sky camera, resulting in around 3400 unique observations.  We then bin the sky brightness observations onto a Healpixel grid of nside=16 and compute the model sky brightness at each Healpixel and find the distance between the predicted brightness minimum and the observed minimum.  The results, binned by moon and sun altitude are shown in Figure~\ref{fig:darkDir}.  The results are promising, with the median offsets tending to be around 15$\degree$.  Note we have not done any significant screening for sparse clouds in the observations, which would probably reduce the differences even more. 
-
-Using the same set of 3400 observations, we zeropoint each frame (to correct for any average cloud cover or instrument zeropoint drift) and record the model and observation zenith sky brightness. Figure~\ref{fig:zenithModel} shows the median and standard deviation of the model and observation zenith residuals.  In general, the model does an excellent job matching the observed zenith sky brightness, and only fails when the moon is very high in the sky.  
+For the observations from the all-sky camera, we select those that have at least 200 stars detected to select those without extreme cloud coverage. To speed things up, we use every 10th frame from the sky camera, resulting in around 3400 unique observations.  We then bin the sky brightness observations onto a Healpixel grid of nside=16 and compute the model sky brightness at each Healpixel and zeropoint each frame (to correct for any average cloud cover or instrument zeropoint drift) and record the model and observation zenith sky brightness. Figure~\ref{fig:zenithModel} shows the median and standard deviation of the model and observation zenith residuals.  In general, the model does an excellent job matching the observed zenith sky brightness, and only fails when the moon is very high in the sky.  
 
 
-
-
-% from validate.py
-\begin{figure*}[ht]
-  \begin{center}
-  \includegraphics[height=5cm]{plots/medianAngDiff_R_.pdf}\includegraphics[height=5cm]{plots/rmsAngDiff_R_.pdf} \\
-  \includegraphics[height=5cm]{plots/medianAngDiff_G_.pdf}\includegraphics[height=5cm]{plots/rmsAngDiff_G_.pdf} \\
-  \includegraphics[height=5cm]{plots/medianAngDiff_B_.pdf}\includegraphics[height=5cm]{plots/rmsAngDiff_B_.pdf}
-  \end{center}
-  \caption{Comparing the angular distance between the model-predicted darkest spot on the sky and the darkest spot as observed by the Canon all-sky camera \label{fig:darkDir}.  Dashed lines mark moonrise and end of twilight (lower left region is dark-time).  The panels on the left show the median distance between the model and observation for each bin while the right panels show the robust-RMS for each bin.  Most of the variation can be attributed to frames with clouds.}
-\end{figure*}
-
-\clearpage
 
 
 % from validate.py
@@ -293,9 +279,11 @@ In Table~\ref{table:zenithRMSSky}, we list the (robust) RMS residuals between ou
 \begin{table}
   \caption{Dark sky surface brightnesses }
   \label{table:darkSky}
+  \begin{center}
   \begin{tabular}{c c  c}
   Filter & Model & \cite{Ivezic08} \\
   & ($\mu$) &  ($\mu$)  \\
+  \hline
   $u$ &    22.81 $\pm$  0.04  &  22.90 \\
   $g$ &    22.27 $\pm$  0.11  &  22.30 \\
   $r$ &    21.25 $\pm$  0.08  &  21.20 \\
@@ -303,6 +291,7 @@ In Table~\ref{table:zenithRMSSky}, we list the (robust) RMS residuals between ou
   $z$ &    19.40 $\pm$  0.02  &  19.60 \\
   $y$ &    18.10 $\pm$  0.01  &  18.60 
   \end{tabular}
+  \end{center}
 \end{table}
 
 
@@ -311,6 +300,7 @@ In Table~\ref{table:zenithRMSSky}, we list the (robust) RMS residuals between ou
   
   \caption{ Robust RMS differences between the model and Canon sky observations in different conditions.}
   \label{table:zenithRMSSky}
+  \begin{center}
   \begin{tabular}{c c c c}
   Filter & Dark Time & Moon Up & Twilight \\
   & (mags/sq arcsec)   & mags/sq arcsec) & (mags/sq arcsec) \\
@@ -319,12 +309,14 @@ In Table~\ref{table:zenithRMSSky}, we list the (robust) RMS residuals between ou
   G & 0.21 & 0.29 & 0.26 \\
   B & 0.22 & 0.38 & 0.26 
   \end{tabular}
+  \end{center}
 \end{table}
 
 
 \begin{table}
   \caption{Parameter fits to data from \cite{Patat06}}
   \label{table:PatatFits}
+  \begin{center}
   \begin{tabular}{c c c}
   Filter & $r_{12/z}$ & $a$  \\
   & & (1/radians) \\
@@ -335,6 +327,7 @@ In Table~\ref{table:zenithRMSSky}, we list the (robust) RMS residuals between ou
   R & 3.35  & 24.35 \\
   I & 2.29  & 24.08
 \end{tabular}
+\end{center}
 \end{table}
 
 
@@ -355,16 +348,16 @@ We can also compare our model to various published observations of the night sky
 
 \begin{figure*}[ht]
   \begin{center}
-  \includegraphics[height=5cm]{plots/residTON_R.pdf}\includegraphics[height=5cm]{plots/residTON_G.pdf}\includegraphics[height=5cm]{plots/residTON_B.pdf} \\
-  \includegraphics[height=5cm]{plots/zpTON_R.pdf}\includegraphics[height=5cm]{plots/zpTON_G.pdf}\includegraphics[height=5cm]{plots/zpTON_B.pdf}
+  \includegraphics[height=4cm]{plots/residTON_R.pdf}\includegraphics[height=4cm]{plots/residTON_G.pdf}\includegraphics[height=4cm]{plots/residTON_B.pdf} \\
+  \includegraphics[height=4cm]{plots/zpTON_R.pdf}\includegraphics[height=4cm]{plots/zpTON_G.pdf}\includegraphics[height=4cm]{plots/zpTON_B.pdf}
   \end{center}
   \caption{The Canon camera zenith sky brightness residuals along with the adopted magnitude zeropoint for each frame. The outlier residuals at large values are most likely times when there were clouds at zenith.  \label{fig:timeOfNight}}
 \end{figure*}
 
 \begin{figure*}[ht]
 \begin{center}
-  \includegraphics[height=5cm]{plots/residTOY_R.pdf}\includegraphics[height=5cm]{plots/residTOY_G.pdf}\includegraphics[height=5cm]{plots/residTOY_B.pdf} \\
-  \includegraphics[height=5cm]{plots/zpTOY_R.pdf}\includegraphics[height=5cm]{plots/zpTOY_G.pdf}\includegraphics[height=5cm]{plots/zpTOY_B.pdf}
+  \includegraphics[height=4cm]{plots/residTOY_R.pdf}\includegraphics[height=4cm]{plots/residTOY_G.pdf}\includegraphics[height=4cm]{plots/residTOY_B.pdf} \\
+  \includegraphics[height=4cm]{plots/zpTOY_R.pdf}\includegraphics[height=4cm]{plots/zpTOY_G.pdf}\includegraphics[height=4cm]{plots/zpTOY_B.pdf}
   \end{center}
   \caption{The Canon camera zenith sky brightness residuals along with the adopted magnitude zeropoint for each frame. \label{fig:timeOfYear}}
 \end{figure*}
