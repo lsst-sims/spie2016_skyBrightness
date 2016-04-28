@@ -21,10 +21,28 @@
 \newcommand\pasp{Publications of the ASP}
 \newcommand\apjl{Astrophysical Journal, Letters}
 
-\title{A Sky Brightness Model for LSST}
+\title{An Optical to IR Sky Brightness Model For the LSST}
 \author[a]{Peter Yoachim}
-\author[b]{and the rest...}
+\author[b]{Michael Coughlin}
+\author[c]{George Z. Angeli }
+\author[c]{Charles F. Claver }
+\author[a]{Andrew J. Connolly}
+\author[d]{Kem Cook}
+\author[a]{Scott Daniel}
+\author[a]{\v{Z}eljko Ivezi\'{c}}
+\author[a]{R. Lynne Jones}
+\author[c]{Catherine Petry}
+\author[c]{Michael Reuter}
+\author[b]{Christopher Stubbs}
+\author[c]{Bo Xin}
+
 \affil[a]{University of Washington}
+\affil[b]{Harvard University}
+\affil[c]{LSST Observatory}
+\affil[d]{Cook Astronomical Consulting}
+
+
+\authorinfo{Further author information:\\Peter Yoachim: E-mail: yoachim@uw.edu}
 
 \pagestyle{empty}
 
@@ -42,16 +60,16 @@
 
 \section{Introduction}
 
-An accurate model of the background sky emission is needed to accurately simulate and schedule observations for LSST.  As a starting point, we use the ESO SkyCalc Sky Model Calculator\footnote{\url{http://www.eso.org/observing/etc/bin/gen/form?} \url{INS.MODE=swspectr+INS.NAME=SKYCALC}} \cite{Noll12,Jones13}.  The ESO model includes scattered moonlight, scattered starlight, zodiacal light, molecular emission from the lower atmosphere, emission lines from the upper atmosphere, and airglow continuum.  The ESO model is designed for Paranal, which seems to be very similar to Pachon.  Pachon is located 625 km south of Paranal, at an altitude of 2,700m compared to Paranal at 2,600m.  
+An accurate model of the background sky emission is needed to accurately simulate and schedule observations for LSST.  As a starting point, we use the ESO SkyCalc Sky Model Calculator\footnote{\url{http://www.eso.org/observing/etc/bin/gen/form?} \url{INS.MODE=swspectr+INS.NAME=SKYCALC}} \cite{Noll12,Jones13}.  The ESO model includes scattered moonlight, scattered starlight, zodiacal light, molecular emission from the lower atmosphere, emission lines from the upper atmosphere, and airglow continuum.  The ESO model is designed for Paranal, which is very similar to Pachon.  Pachon is located 625 km south of Paranal, at an altitude of 2,700m compared to Paranal at 2,600m.  
 
 The general idea is that the ESO model computes the expected sky background from different sources from first principles (e.g., single and double scattering of lunar light). Because LSST will want to compute the sky background for the full sky millions of times throughout the survey, we need to improve performance by pre-computing the ESO model on relevant parameter grids and interpolating the results to our specific observation times. Also, the ESO source code is not publicly available, limiting our ability to run it directly at scale.
 
-Our new sky brightness code described in this paper can be found at \url{https://github.com/lsst/sims\_skybrightness}. In \S\ref{sec:eso} and~\ref{sec:interp}, we give a brief description of the sky components in the ESO model and how we interpolate their results. In \S\ref{sec:obs} and~\ref{sec:twi} we describe observations taken on Pachon and how we have used those observations to construct a model of the twilight sky.  Finally, \S\ref{sec:validate} shows our 
+Our new sky brightness code described in this paper can be found at \url{https://github.com/lsst/sims\_skybrightness}. In \S\ref{sec:eso} and~\ref{sec:interp}, we give a brief description of the sky components in the ESO model and how we interpolate their results. In \S\ref{sec:obs} and~\ref{sec:twi} we describe observations taken on Pachon and how we have used those observations to construct a model of the twilight sky.  Finally, \S\ref{sec:validate} shows how we have validated the model.
 
 \section{The ESO Model}\label{sec:eso}
 In this section, we briefly describe the sky components included in the ESO model and how we have created grids of model spectra with them. The ESO model is described in detail in \cite{Noll12} and \cite{Jones13}.
 
-For each ESO model component, we save the output spectra as numpy zip files.  The model spectra run from 300 nm to 2 microns, with 0.1 nm stepsize.  In addition to the spectra, we use the LSST filter response curves to pre-compute the 6 LSST magnitudes for each spectrum at each grid point. These $\sim3500$ pre-computed spectra and $\sim$21,000 magnitudes are stored in their own git repository (\url{https://github.com/lsst/sims\_skybrightness\_data}) and are about 1 Gb in size.
+For each ESO model component, we save the output spectra as numpy zip files.  The model spectra run from 300 nm to 2 microns, with 0.1 nm stepsize.  In addition to the spectra, we use the LSST filter response curves to pre-compute the 6 LSST magnitudes for each spectrum at each grid point. These $\sim3500$ pre-computed spectra and $\sim$21,000 magnitudes are stored in their own git repository (\url{https://github.com/lsst/sims\_skybrightness\_data}) and total about 1 Gb in size.
 
 \subsection{Zodiacal Light}
 Zodiacal light is caused by sunlight scattered by dust grains in the plane of the ecliptic.  The ESO model varies the Zodiacal light as a function of ecliptic coordinates and airmass.  
@@ -69,7 +87,7 @@ We use an airmass grid of 1, 1.2, 1.4, 2.0, and 2.5 and a Healpixel \cite{Gorski
 
 \subsection{Scattered Moonlight}
 
-\cite{Krisciunas91} provide one of the most popular models for computing the scattered moon light. This model is based on observed magnitudes from Mauna Kea. The ESO code uses the updated model of \cite{Jones13} which is fully spectroscopic and designed for Cerro Paranal. \cite{Jones13} claim their model uncertainty is $<20$\% in the optical.  Unlike the \cite{Krisciunas91} model that is a fit to observed broadband sky brightnesses, the \cite{Jones13} model uses fully 3D single scattering calculations and provides an entire spectrum. The \cite{Jones13} model does a better job matching observations than the \cite{Krisciunas91}, particularly at short wavelengths.
+Ref.~\citenum{Krisciunas91} provide one of the most popular models for computing the scattered moon light. This model is based on observed magnitudes from Mauna Kea. The ESO code uses the updated model of Ref.~\citenum{Jones13} which is fully spectroscopic and designed for Cerro Paranal. \cite{Jones13} claim their model uncertainty is $<20$\% in the optical.  Unlike the \cite{Krisciunas91} model that is a fit to observed broadband sky brightnesses, the \cite{Jones13} model uses fully 3D single scattering calculations and provides an entire spectrum. The \cite{Jones13} model does a better job matching observations than the \cite{Krisciunas91}, particularly at short wavelengths.
 
 We build a template library of scattered moonlight by considering moon-sun separations of 0$\degree$\ to 180$\degree$ in 15 degree steps, and moon altitudes from 15$\degree$\ to 90$\degree$.  We then compute the expected spectrum on a grid of 29 positions across the sky. This is a Healpixel grid (with an nside of 4, resolution of $\sim15\degree$), based on altitude and azimuth (relative to the moon), where we ignore pointings with an airmass greater than 2.6. This results in a total of 2,262 template spectra for the scattered moonlight\footnote{The very observant might notice that since the azimuth is defined relative to the moon, the sky is symmetric and we should be able to drop half of the Healpixels}. Examples of the scattered moonlight spectra are shown in Figure~\ref{fig:moon}.
 
@@ -83,9 +101,9 @@ We build a template library of scattered moonlight by considering moon-sun separ
 
 \subsection{Airglow}
 
-The airglow is assumed to be a function of airmass and solar activity as measured by solar radio observations.  We compute the spectra on a grid of airmass of 1 to 2 with steps of 0.1 and additionally an airmass of 2.5.  For the solar activity, we span 50 to 310 SFU with a step size of 20, resulting in a total of 168 airglow spectra. 
+The airglow is assumed to be a function of airmass and solar activity as measured by solar radio observations.  We compute the spectra on a grid of airmass of 1 to 2 with steps of 0.1 and additionally an airmass of 2.5.  For the solar activity, we span 50 to 310 SFU with a step size of 20, resulting in a total of 168 airglow spectra. (xxx Solar flux units which are equal to XXX Jy.)
 
-Technically, the airglow also varies with the time of year and time of night.  This variation is quite small relative to the solar activity \cite{Noll12}, so we have not included it.  \cite{Patat08} also shows the seasonal variation is negligible in $B$, and grows to around a peak of $\pm0.5$ mags in $I$. Examples of the airglow spectra are shown in Figure~\ref{fig:airglow}.
+Technically, the airglow also varies with the time of year and time of night.  This variation is quite small relative to the solar activity \cite{Noll12}, so we have not included it.  \citenum{Patat08} also shows the seasonal variation is negligible in $B$, and grows to around a peak amplitude of $\sim\pm0.25$ mags/sq arcsec in $I$. Examples of the airglow spectra are shown in Figure~\ref{fig:airglow}. 
 
 \begin{figure}[ht]
 \begin{center}
@@ -128,9 +146,9 @@ For the Zodiacal and Lunar components, since we have placed the templates at hea
 
 \section{Observations}\label{sec:obs}
 
-Several sky monitoring instruments have been installed at the LSST site on Cerro Pachon.  A Canon 5D Mark III SLR has been taking data since Jan 2014.  The Canon takes 10s exposures in RGB filters throughout the night and during twilight.  More information on the Canon can be found at \url{http://ls.st/mfz}.
+Several sky monitoring instruments have been installed at the LSST site on Cerro Pachon.  A Canon 5D Mark III SLR has been taking data since Jan 2014.  The Canon takes 30 second exposures in RGB filters throughout the night and during twilight.  More information on the Canon setup can be found at \url{http://ls.st/mfz}.
 
-The current pipeline for the Canon data takes aperture photometry of bright stars and records their magnitudes as well as the sky brightness measured in an annulus around each star.  We have combined the observations into a database with a resulting 42,000 images producing 91.5 million photometric measurements spanning 311 days.  
+The current pipeline for the Canon data takes aperture photometry of bright stars and records their magnitudes as well as the sky brightness measured in an annulus around each star.  We have combined the observations into a database from 42,000 images producing 91.5 million photometric measurements spanning 311 days.  
 
 We use these sky observations to fit a reasonable twilight sky brightness model and verify the other components of the sky brightness model.
 
@@ -213,16 +231,16 @@ One important lesson from the data is the counter-intuitive result that during t
 \begin{tabular}{c c c c c c c}
   Filter & $r_{12/z}$ & $a$  & $b$  & $c$  & $f_z,dark$ & m$_z,dark$ \\
   & & (1/radians) & (1/airmass) & (az term/airmass) & (erg/s/cm$^2$)$\times 10^8$ \\
+  \hline
+  \hline
   B  & 8.42 & 22.96 & 0.29 & 0.30 & 3.05  &  22.35 \\
   G  & 4.14 & 22.94 & 0.30 & 0.32 & 5.50  &  21.71 \\
   R  & 2.73 & 22.20 & 0.30 & 0.33 & 8.02  &  21.30 \\
-  \hline
   $z^{\rm{a}}$ & 2.29 & 24.08 & 0.30 & 0.30 & 50.58  &  19.30 \\
   $y^{\rm{a}}$  & 2.0 & 24.08 & 0.30 & 0.30 & 167.50  &  18.00 \\
- \hline 
- $u^{\rm{b}}$  & 16.00 & 22.96 & 0.29 & 0.30 & 2.01  &  22.80\\
+  $u^{\rm{b}}$  & 16.00 & 22.96 & 0.29 & 0.30 & 2.01  &  22.80\\
  \hline
- \multicolumn{7}{l}{$^{\rm{a}}$The $z$ and $y$ fits are based on $I$-band fits from the literature.} \\
+ \multicolumn{7}{l}{$^{\rm{a}}$The $z$ and $y$ fits are based on $I$-band fits from \cite{Patat06}.} \\
  \multicolumn{7}{l}{The $b$ and $c$ terms are assumed to be similar to the other optical filters.} \\
  \multicolumn{7}{l}{$^{\rm{b}}$The $u$ filter is assumed to be identical to $B$, but with a brighter $r_{12/z}$ value.}
  \end{tabular}
@@ -254,8 +272,6 @@ To verify the performance of the sky model, we compare it to the sky brightness 
 For the observations from the all-sky camera, we select those that have at least 200 stars detected to select those without extreme cloud coverage. To speed things up, we use every 10th frame from the sky camera, resulting in around 3400 unique observations.  We then bin the sky brightness observations onto a Healpixel grid of nside=16 and compute the model sky brightness at each Healpixel and zeropoint each frame (to correct for any average cloud cover or instrument zeropoint drift) and record the model and observation zenith sky brightness. Figure~\ref{fig:zenithModel} shows the median and standard deviation of the model and observation zenith residuals.  In general, the model does an excellent job matching the observed zenith sky brightness, and only fails when the moon is very high in the sky.  
 
 
-
-
 % from validate.py
 \begin{figure*}[ht]
   \begin{center}
@@ -284,6 +300,7 @@ In Table~\ref{table:zenithRMSSky}, we list the (robust) RMS residuals between ou
   Filter & Model & \cite{Ivezic08} \\
   & ($\mu$) &  ($\mu$)  \\
   \hline
+  \hline
   $u$ &    22.81 $\pm$  0.04  &  22.90 \\
   $g$ &    22.27 $\pm$  0.11  &  22.30 \\
   $r$ &    21.25 $\pm$  0.08  &  21.20 \\
@@ -305,6 +322,7 @@ In Table~\ref{table:zenithRMSSky}, we list the (robust) RMS residuals between ou
   Filter & Dark Time & Moon Up & Twilight \\
   & (mags/sq arcsec)   & mags/sq arcsec) & (mags/sq arcsec) \\
   \hline
+  \hline
   R & 0.22 & 0.24 & 0.29 \\
   G & 0.21 & 0.29 & 0.26 \\
   B & 0.22 & 0.38 & 0.26 
@@ -321,6 +339,7 @@ In Table~\ref{table:zenithRMSSky}, we list the (robust) RMS residuals between ou
   Filter & $r_{12/z}$ & $a$  \\
   & & (1/radians) \\
   \hline
+  \hline
   U & 13.40 & 22.37 \\
   B & 15.49 & 22.60 \\
   V & 4.78  & 22.31 \\
@@ -331,15 +350,12 @@ In Table~\ref{table:zenithRMSSky}, we list the (robust) RMS residuals between ou
 \end{table}
 
 
-
 \begin{figure}[ht]
   \begin{center}
   \includegraphics[height=5cm]{plots/patatFits.pdf}
   \end{center}
   \caption{Zenith sky surface brightness data scraped from \cite{Patat06} and fit with our simple exponential decay plus constant model. Dashed black lines show the best-fit curves.  The red dashed line shows the 12-degree twilight line.  \label{fig:Patat} }
 \end{figure}
-
-
 
 
 In Figures~\ref{fig:timeOfNight} and~\ref{fig:timeOfYear} we look at the observed and predicted zenith sky brightness during dark time as a function of the time of night and the time of year.  We also plot the adopted instrumental magnitude zeropoint, as the zeropoint could absorb changed in the sky brightness that were not correctly modeled.  There are no obvious trends in the plots, suggesting that adding terms to model the seasonal and nightly variations in the sky would not significantly improve our model accuracy.  The zenith residuals do show a $\sim-0.7$ magnitude offset, suggesting a small error in how well we fit the airmass dependence.  This is probably just the result of there being many more high airmass pixels than zenith pixels, so a small error at high airmass can bias the computed frame zeropoint.
@@ -379,10 +395,15 @@ We can also compare our model to various published observations of the night sky
   \begin{center}
   \includegraphics[height=5cm]{plots/deltam5.pdf}\includegraphics[height=5cm]{plots/a1_alt_angle_meshgrid.pdf}
   \end{center}
-  \caption{ Comparison of our sky model (left) and observations of the sun by \cite{Coughlin15} (right).  We only calculate for a single time (when the moon is at an altitude of $\sim 30$ degrees. \label{fig:cCompare}}
+  \caption{ Comparison of our sky model (left) and observations of the sun by \cite{Coughlin15} (right).  We only calculate for a single time (when the moon is at an altitude of $\sim 30$ degrees. Unlike images taken when the sun is up, other emission components dominate at low altitude.  \label{fig:cCompare}}
 \end{figure*}
 
 
+
+\bibliography{skyModel}
+\bibliographystyle{spiebib}
+
+\end{document}
 
 \section{Possible Future Work}
 
@@ -395,14 +416,6 @@ When fitting the all-sky twilight data, we assumed that as long as the moon had 
 When a spectrum is requested from the twilight model, we currently return a solar spectrum multiplied by a smooth spline curve to match the expected broad-band magnitudes.  While the twilight is solar-like, our simple procedure means the spectrum does not have the correct atmospheric absorption features.  A future improvement could be to use observed twilight spectra to make our returned results more realistic.
 
 The sky model currently uses the pyEphem package to compute sun and moon positions as well as a few coordinate transformations. It would be preferable to eliminate this dependency.  
-
-
-\bibliography{skyModel}
-\bibliographystyle{spiebib}
-
-\end{document}
-
-
 
 %%  LocalWords:  ESO SkyCalc airglow Noll numpy nm airmass Healpixel
 %%  LocalWords:  nside Healpixels Krisciunas Patat twi az skyModel Gb
