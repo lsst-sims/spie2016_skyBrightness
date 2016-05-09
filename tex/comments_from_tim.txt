@@ -1,23 +1,25 @@
 Some initial comments on the paper from a pedantic viewpoint.
 
-    Please fix missing page number in Ref 9
-    Please add missing arXiv IDs in ref 3 and 7 (including normalizing what the journal text should be). Consider making it a clickable URL with something like
+?    Please fix missing page number in Ref 9
+DONE-    Please add missing arXiv IDs in ref 3 and 7 (including normalizing what the journal text should be). Consider making it a clickable URL with something like
 
     \newcommand{\arxiv}[1]{\href{http://arxiv.org/abs/#1}{arXiv:#1}}
 
-    Please expand LSST on first usage in the introduction, also cite the Kahn SPIE paper at that point.
+DONE-    Please expand LSST on first usage in the introduction, also cite the Kahn SPIE paper at that point.
 
-        Kahn, S., “Final design of the Large Synoptic Survey Telescope,” in [Ground-Based and Airborne Telescopes IV], Hall, H. J., Gilmozzi, R., and Marshall, H. K., eds., Proc. SPIE 9906, in press (2016).
-
-    Consider specifying a release tag for the version of sims_skybrightness being discussed here. Even better (and I think we should always do this) would be to have an explicit Github release for it with Zenodo integration so that you can cite a DOI for the software.
-    numpy should be in texttt font I think.
-    Inconsistent spacing between ~ 3500 and ~21,000 in section 2 introduction
-    Can figs 1, 2, 3 be a bit bigger. It's hard to read the small font in the figure. Or use bigger fonts?
-    Can Fig 6 be more compact as the X axes is repeated each time so there is a lot of wasted whitespace when the figures could all be abutted. Also it might be clearer if the Y axis was synchronized (and whitespace squashed) as it's difficult to compare when the scales are 6.5->9.5, 4.5->9, 5->9, 4.5->8.5, 5->10 and 4->10.
-    Is there any way to not have pages of figures all at the end of the paper?
-    Author list has weird spacing in some of the superscripts. Also the name should not be split across lines so use ~ to anchor first name and surname.
-    There do not seem to be any keywords listed below the abstract?
-    The paper is missing the official acknowledgment to funding agencies.
-    Rather than a reference to a confluence page for the Canon setup can you please copy the text to a Sims tech note so that it is citable and will not quickly disappear (it can be backed on Zenodo and ADS will index it that way).
+DONE-        Kahn, S., “Final design of the Large Synoptic Survey Telescope,” in [Ground-Based and Airborne Telescopes IV], Hall, H. J., Gilmozzi, R., and Marshall, H. K., eds., Proc. SPIE 9906, in press (2016).
+DONE-    numpy should be in texttt font I think.
+DONE-    Inconsistent spacing between ~ 3500 and ~21,000 in section 2 introduction
+DONE-    Can figs 1, 2, 3 be a bit bigger. It's hard to read the small font in the figure. Or use bigger fonts?
+DONE-    Is there any way to not have pages of figures all at the end of the paper?
+DONE-    Author list has weird spacing in some of the superscripts. Also the name should not be split across lines so use ~ to anchor first name and surname.
+DONE-    There do not seem to be any keywords listed below the abstract?
+DONE-    The paper is missing the official acknowledgment to funding agencies.
 
 That's what I've found from a quick pass.
+
+Punting to do if time:
+
+    Can Fig 6 be more compact as the X axes is repeated each time so there is a lot of wasted whitespace when the figures could all be abutted. Also it might be clearer if the Y axis was synchronized (and whitespace squashed) as it's difficult to compare when the scales are 6.5->9.5, 4.5->9, 5->9, 4.5->8.5, 5->10 and 4->10.
+    Consider specifying a release tag for the version of sims_skybrightness being discussed here. Even better (and I think we should always do this) would be to have an explicit Github release for it with Zenodo integration so that you can cite a DOI for the software.
+DONE-    Rather than a reference to a confluence page for the Canon setup can you please copy the text to a Sims tech note so that it is citable and will not quickly disappear (it can be backed on Zenodo and ADS will index it that way).
