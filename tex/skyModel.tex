@@ -153,7 +153,7 @@ For the Zodiacal and Lunar components, since we have placed the templates at Hea
 
 Several sky monitoring instruments have been installed at the LSST site on Cerro Pachon.  In this paper, we use data from a Canon 5D Mark III digital SLR with a 15mm focal length f/2.8 Sigma fisheye lens, pointed at the zenith. The camera is installed beneath a hemispherical plexiglass dome that is installed in the roof of the ALO building on the Cerro Pachon ridge.  The CMOS imager in the Canon 5D camera has a Bayer array in the focal plane, with sub-pixels allocated to BGGR.  These bands are fairly close to the astronomical standard BVR set of filters. Although one can obtain modified Canon cameras with the NIR-blocking filter removed, the unit we installed in Jan 2014 was an off-the-shelf version. This means the sky brightness in these bands will be dominated by scattered and reflected sunlight and unresolved sources, but we aren't sensitive to OH emission.  This setup has been taking data since Jan 2014.  The Canon takes 30 second exposures in RGB filters throughout the night and during twilight. 
 
-The current analysis pipeline for the Canon data takes aperture photometry of bright stars and records their magnitudes as well as the sky brightness measured in an annulus around each star.  We have combined the observations into a database from 42,000 images producing 91.5 million photometric measurements spanning 311 days.  
+The current analysis pipeline for the Canon data takes aperture photometry of bright stars and records their magnitudes as well as the sky brightness measured in an annulus around each star.  We have combined the observations into a database from 42,000 images producing 91.5 million photometric measurements spanning 311 days.  A seperate reduction pipeline to analyze the distribution of clouds from the same observations is described in Ref.~\citenum{Yoachim16}.
 
 We use these sky observations to fit a twilight sky brightness model and verify the other components of the sky brightness model.
 
@@ -405,7 +405,7 @@ As part of the LSST simulations software stack we have created a model for night
 
 \acknowledgments        
  
-We thank Tim Jenness for comments on a draft of this document.  This material is based upon work supported in part by the National Science Foundation through Cooperative Support Agreement (CSA) Award No. AST–1227061 under Governing Cooperative Agreement 1258333 managed by the Association of Universities for Research in Astronomy (AURA), and the Department of Energy under Contract No. DE–AC02–76SF00515 with the SLAC National Accelerator Laboratory. Additional LSST funding comes from private donations, grants to universities, and in-kind support from LSSTC Institutional Members.
+We thank Tim Jenness and Michael Wood-Vasey for comments on a draft of this document.  This material is based upon work supported in part by the National Science Foundation through Cooperative Support Agreement (CSA) Award No. AST–1227061 under Governing Cooperative Agreement 1258333 managed by the Association of Universities for Research in Astronomy (AURA), and the Department of Energy under Contract No. DE–AC02–76SF00515 with the SLAC National Accelerator Laboratory. Additional LSST funding comes from private donations, grants to universities, and in-kind support from LSSTC Institutional Members.
 
 \bibliography{skyModel}
 \bibliographystyle{spiebib}
