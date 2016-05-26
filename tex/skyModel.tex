@@ -40,7 +40,7 @@
 
 \affil[a]{University of Washington, Seattle, WA, USA}
 \affil[b]{Harvard University, Boston, MA, USA}
-\affil[c]{LSST Observatory, Tucson, AZ, USA}
+\affil[c]{LSST Project Office, Tucson, AZ, USA}
 \affil[d]{Cook Astronomical Consulting, CA, USA}
 
 
@@ -65,7 +65,7 @@
 
 An accurate model of the background sky emission is needed to accurately simulate and schedule observations for the Large Synoptic Survey Telescope (LSST)\cite{Kahn16}.  The night sky surface brightness at zenith can vary 1.5 magnitudes arcsec$^{-2}$\ in the near IR over the course of a Lunar cycle and over 4 magnitudes arcsec$^{-2}$ in the blue.  Optimizing the depth of LSST observations while maintinaing the desired cadence requires us to have an accurate prediction of the sky brightness for all times.  Experiments with the LSST Operations Simulator (OpSim) \cite{Delgado14} have shown that using hard limits (e.g., stay above an airmass of 2.5 and stay 30 degrees away from the moon) help, but that observations then tend to pile-up at the limit points.  A true optimization of the observations requires calculating the limiting depth of potential observations, which in turn directly depends on the sky surface brightness.
 
-To start building a complete sky emission model, we use the ESO SkyCalc Sky Model Calculator\footnote{\url{http://www.eso.org/observing/etc/bin/gen/form?} \url{INS.MODE=swspectr+INS.NAME=SKYCALC}} \cite{Noll12,Jones13}.  The ESO model includes scattered moonlight, scattered starlight, zodiacal light, molecular emission from the lower atmosphere, emission lines from the upper atmosphere, and airglow continuum.  The ESO model is designed for Cerro Paranal, which is very similar to Cerro Pachon.  Pachon is located 625 km south of Paranal, at an altitude of 2,700m compared to Paranal at 2,600m.  
+To start building a complete sky emission model, we use the ESO SkyCalc Sky Model Calculator\footnote{\url{http://www.eso.org/observing/etc/bin/gen/form?} \url{INS.MODE=swspectr+INS.NAME=SKYCALC}} \cite{Noll12,Jones13}.  The ESO model includes scattered moonlight, scattered starlight, zodiacal light, molecular emission from the lower atmosphere, emission lines from the upper atmosphere, and airglow continuum.  The ESO model is designed for Cerro Paranal, which is very similar to Cerro Pachon.  Pachon is located 625 km south of Paranal, at an altitude of 2\,700 m compared to Paranal at 2\,600 m.  
 
 The ESO model computes the expected sky background from different sources from first principles (e.g., single and double scattering of lunar light). Because LSST will want to compute the sky background for the full sky millions of times throughout the 10-year survey, we need to improve performance by pre-computing the ESO model on relevant parameter grids and interpolating the results to our specific observing conditions. Also, the ESO source code is only avaialble through a web-interface with no public API (so a single model can take of order seconds to generate), limiting our ability to run it directly at scale.
 
@@ -146,11 +146,24 @@ Because the upper atmosphere, lower atmosphere, and scattered star light only va
 
 \section{Interpolating the Templates}\label{sec:interp}
 
-For all the interpolations, we weight and average the logarithm of the template spectra (or average the magnitudes).  In the future, we could experiment with switching between interpolating the spectra and the log of the spectra based on how much variation there is between interpolation points.  We use linear interpolation (e.g., the spectrum of an observation at an airmass of 1.02 will be the sum of 0.8 times the airmass 1.0 template and 0.2 times the airmass 1.1 template). 
+For all the interpolations, we weight and average the logarithm of the template spectra (or average the magnitudes).  In the future, we could experiment with switching between interpolating the spectra and the log of the spectra based on how much variation there is between interpolation points.  
 
-For the zodiacal and Lunar components, since we have placed the templates at HEALPix grid-points, we can use fast healpy\footnote{\url{https://github.com/healpy/healpy}} routines to find the 4 nearest HEALPix points, along with their weights.  
+For components that vary with only one parameter (e.g., airmass), we compute the model spectrum $F_{\rm{model}}(\lambda)(X)$ at arbitrary airmass $X$ as
+\begin{equation} \label{eq:interp_spec}
+\log{F_{\rm{model},\lambda}(X)} = w_1 \log{F_{\rm{template},\lambda}(X_1)} + w_2\log{F_{\rm{template,\lambda}}(X_2)}
+\end{equation}
+where the $w$ terms are weights for linear interpolation and $F_{\rm{template}}(\lambda)(X_i)$ are the template spectra at the pre-computed grid points $X_1$ and $X_2$ and $X_1 < X < X_2$.    Or in magnitudes,
+\begin{equation}\label{eq:interp_mag}
+m_{\rm{model},b}(X) = w_1 m_{\rm{template},b}(X_1) + w_2 m_{\rm{template},b}(X_2)
+\end{equation}
+where $m_b$ is the magnitude in filter $b$.
 
-XXX--just put this in as equations.
+
+For the zodiacal and Lunar components, since we have placed the templates at HEALPix grid-points, we can use fast healpy\footnote{\url{https://github.com/healpy/healpy}} routines to find the 4 nearest HEALPix points, along with their weights as they contribute to any arbitrary point on a sphere.  We can then generalize Eqs~\ref{eq:interp_spec} and~\ref{eq:interp_mag} to be general bilinear interpolation accross all model parameters as
+\begin{equation}
+\log{F_{\rm{model},\lambda}(X, \phi, \beta)} = \sum_{X_i, \phi_i, \beta_i} w_i(X_i, \phi_i, \beta_i) \log{F_{\rm{template,\lambda}}(X_i, \phi_i, \beta_i)}
+\end{equation}
+where $X, \phi, \beta$ are the paramters that have been varied when constructing the model grid points (e.g., Airmass, position relative to the moon, and phase of the moon) and $\sum_i w_i = 1$. 
 
 \section{Observations}\label{sec:obs}
 
@@ -211,7 +224,6 @@ where $\phi$ is the azimuthal angle relative to the Sun. The total sky backgroun
 where $m_0$ is the scattered sunlight component to the 12-degree twilight surface brightness at zenith.  
 
 By default, we only apply the twilight component for solar altitudes between -11 and -20 degrees. For solar altitude values less than -20 degrees, we find the other sky components always dominate. For altitudes greater than -11, our simple model breaks down but we expect LSST exposures would saturate well before this level (or the exposure time would have to be so short the dynamic range of the images would be of minimal use).  
-% XXX--maybe drop in number from Stubbs about how far we could go.
 
 We have taken the sky brightness measurements from the Canon camera (when the moon is down) and median-binned the data based on sun altitude and alt-az coordinate.  The median binning effectively eliminates cloudy data.  Some example R-band twilight maps are shown in Figures~\ref{fig:twiSky} and~\ref{fig:twiExp}.  We use these data to find the best-fitting parameters for Equation~\ref{eqn:twi}.  
 
@@ -295,6 +307,8 @@ In Table~\ref{table:darkSky}, we compare the median dark sky surface brightness 
 In Table~\ref{table:zenithRMSSky}, we list the (robust) RMS residuals between our model and the zenith sky brightness observed by the Canon all-sky camera. In general, the residuals between the model and observations have an RMS between 0.2 and 0.3 magnitude arcsecond$^{-2}$.  
 
 
+\clearpage
+
 % from checkDarkSky.py
 \begin{table}
   \caption{Dark sky surface brightnesses }
@@ -361,7 +375,6 @@ In Table~\ref{table:zenithRMSSky}, we list the (robust) RMS residuals between ou
   \caption{Zenith sky surface brightness data scraped from Ref.~\citenum{Patat06} and fit with our simple exponential decay plus constant model. Dashed black lines show the best-fit curves.  The red dashed line shows the 12-degree twilight line.  \label{fig:Patat} }
 \end{figure}
 
-\clearpage
 
 In Figures~\ref{fig:timeOfNight} and~\ref{fig:timeOfYear} we show the observed and predicted zenith sky brightness during dark time as a function of the time of night and the time of year.  We also plot the adopted instrumental magnitude zeropoint, as the zeropoint could absorb changes in the sky brightness that were not correctly modeled.  There are no obvious trends in the plots, suggesting that adding terms to model the seasonal and nightly variations in the sky would not significantly improve our accuracy.  The zenith residuals do show a $\sim-0.15$ magnitude offset, suggesting a small error in how well we fit the airmass dependence (small compared to the $\sim4$ magnitude variation we observe at zenith).  This is probably just the result of there being many more high airmass pixels than zenith pixels, so a small error at high airmass can bias the computed frame zeropoint. It is also possible the zenith brightness extends slightly below the Canon noise floor.
 
@@ -411,7 +424,7 @@ As part of the LSST simulations software stack we have created a model for night
  
 We thank Tim Jenness, Michael Wood-Vasey, and Seth Digel for comments on a draft of this document.  This material is based upon work supported in part by the National Science Foundation through Cooperative Support Agreement (CSA) Award No. AST–1227061 under Governing Cooperative Agreement 1258333 managed by the Association of Universities for Research in Astronomy (AURA), and the Department of Energy under Contract No. DE–AC02–76SF00515 with the SLAC National Accelerator Laboratory. Additional LSST funding comes from private donations, grants to universities, and in-kind support from LSSTC Institutional Members.
 
-Some of the results in this paper have been derived using the HEALPix (K.M. Górski et al., 2005, ApJ, 622, p759) package
+Some of the results in this paper have been derived using the HEALPix (K.M. Górski et al., 2005, ApJ, 622, p759) package \cite{Gorski99}.
 
 \bibliography{skyModel}
 \bibliographystyle{spiebib}
