@@ -154,11 +154,11 @@ For components that vary with only one parameter (e.g., airmass), we compute the
 \begin{equation} \label{eq:interp_spec}
 \log{F_{\rm{model},\lambda}(X)} = w_1 \log{F_{\rm{template},\lambda}(X_1)} + w_2\log{F_{\rm{template,\lambda}}(X_2)}
 \end{equation}
-where the $w$ terms are weights for linear interpolation and $F_{\rm{template}}(\lambda)(X_i)$ are the template spectra at the pre-computed grid points $X_1$ and $X_2$ and $X_1 < X < X_2$.    Or in magnitudes,
+where the $w$ terms are weights for linear interpolation and $F_{\rm{template},\lambda}(X_i)$ are the template spectra at the pre-computed grid points $X_1$ and $X_2$ and $X_1 < X < X_2$.    Or in magnitudes,
 \begin{equation}\label{eq:interp_mag}
-m_{\rm{model},b}(X) = w_1 m_{\rm{template},b}(X_1) + w_2 m_{\rm{template},b}(X_2)
+m_{\rm{model},f}(X) = w_1 m_{\rm{template},f}(X_1) + w_2 m_{\rm{template},f}(X_2)
 \end{equation}
-where $m_b$ is the magnitude in filter $b$.
+where $m_b$ is the magnitude in filter $f$.
 
 
 For the zodiacal and Lunar components, since we have placed the templates at HEALPix grid-points, we can use fast healpy\footnote{\url{https://github.com/healpy/healpy}} routines to find the 4 nearest HEALPix points, along with their weights as they contribute to any arbitrary point on a sphere.  We can then generalize Eqs~\ref{eq:interp_spec} and~\ref{eq:interp_mag} to be general bilinear interpolation accross all model parameters as
@@ -419,7 +419,7 @@ Ref.~\citenum{Coughlin15} use the Sun as a proxy for the moon to observe the exp
 
 \section{Conclusions}
 
-As part of the LSST simulations software stack we have created a model for night sky emission, using the ESO sky brightness calculator as a base to build a library of template spectra.  In typical cloudless night time conditions, the model has a precision of $\pm$0.2-0.3 magnitudes arcsecond$^{-2}$. The model breaks down at airmasses higher than 2.5, near the moon (within $\sim15\degree$), and bright twilight (Sun higher than -10$\degree$).  The model can return broadband magnitudes or full spectra of the expected sky emission.  
+As part of the LSST simulations software stack we have created a model for night sky emission, using the ESO sky brightness calculator as a base to build a library of template spectra.  We have added a new semi-analytical model to describe scattered sunlight to help schedule observations in twilight conditions.  In typical cloudless night time conditions, the model has a precision of $\pm$0.2-0.3 magnitudes arcsecond$^{-2}$. The model breaks down at airmasses higher than 2.5, near the moon (within $\sim15\degree$), and bright twilight (Sun higher than -10$\degree$).  The model can return broadband magnitudes or full spectra of the expected sky emission.  We have compared the model to values in the literature as well as extensive all-sky observations and find the model is in good agreement. We investigate other potentially important parameters to add to our model and find they are similar or below our current precision. 
 
 
 \acknowledgments        
